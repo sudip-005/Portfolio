@@ -1,0 +1,224 @@
+*{
+    border: border-box;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+
+    /* NAV BAR */
+}
+.nav-bar{
+    background-color: #2d2d2d;
+    height: 60px;
+    color: white;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+
+}
+
+.nav-items{
+    color: white;
+    text-decoration: none;
+}
+
+.nav-items:hover{
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+/* ABOUT ME */
+
+.about-me{
+    height: 600px;
+    display:flex ;
+}
+
+.box1{
+    height: 100%;
+    width: 50%;
+    background-color: #1f2020;
+    border: 2px solid wheat;
+}
+
+.box2{
+    height: 100%;
+    width: 50%;
+    border: 2px solid wheat;
+    background-image: url(image.png);
+    filter: grayscale(100%);
+    background-size: cover;
+}
+
+#about-me{
+    color: whitesmoke;
+    font-size: 50px;
+    font-weight: 500;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-left: 35%;
+    margin-top: 10%;
+}
+
+#intro{
+    color: whitesmoke;
+    font-style: italic;
+    font-size: 28px;
+    margin-top: 90px;
+    text-align: center;
+}
+
+button{
+    height: 60px;
+    width: 100px;
+    margin-left: 330px;
+    margin-top: 70px;
+    background-color: rgb(234, 234, 234);
+    border-radius: 5px;
+    
+}
+
+button:hover{
+    border: 3px solid grey;
+}
+#button{
+    text-decoration: none;
+    color: black;
+    font-weight: 700;
+}
+
+/* PERSONAL INFO */
+
+.personal-info{
+    height: 350px;
+    background-color:#1f2020;
+    display: flex;
+}
+.info{
+    color: whitesmoke;
+    width: 50%;
+    border: 2px solid wheat;
+}
+#info, #edu, #hobby, #interest{
+    text-align: center;
+    font-size: 32px;
+    margin-top: 20px;
+    text-decoration: underline;
+    color: whitesmoke;
+}
+.info2{
+    line-height: 2;
+    margin-top: 20px;
+    font-style: italic;
+    font-size: 20px;
+}
+.img1{
+    width: 40%;
+    height: 90%;
+    background-image: url(https://lp-cms-production.imgix.net/2019-06/GettyImages-143559567_high.jpg?fit=crop&ar=1%3A1&w=1200&auto=format&q=75);
+    background-size: cover;
+    filter: grayscale(100%);
+    border-radius: 50%;
+    border: 2px solid wheat;
+    margin:auto
+}
+.img2{
+    width: 40%;
+    height: 90%;
+    background-image: url(https://mygate.com/wp-content/uploads/2024/03/84.png);
+    background-size: cover;
+    filter: grayscale(100%);
+    border-radius: 50%;
+    border: 2px solid wheat;
+    margin: auto;
+}
+.img{
+    width: 50%;
+    display: flex;
+    border: 2px solid wheat;
+}
+.info2{
+    margin-left: 35px;
+}
+
+/* EDUCATION */
+
+.education{
+    height: 300px;
+    background-color:#1f2020;
+    display: flex;
+}
+.edu{
+    width: 50%;
+    height: 100%;
+    border: 2px solid wheat;
+    color: whitesmoke;
+}
+
+.ins, #experience, #hi, #ii{
+    line-height: 2;
+    margin-top: 10px;
+    text-align: center;
+    font-style: italic;
+    font-size: 18px;
+    color: whitesmoke;
+}
+
+.edu-img1{
+    border: 2px solid wheat;
+    height: 95%;
+    width: 22%;
+    background-image: url(https://media.istockphoto.com/id/1239501504/vector/cartoon-banner-graduates-throw-their-caps-and-diplomas-the-end-of-college-vector.jpg?s=612x612&w=0&k=20&c=hbtVu2RcVKGDlqUHGUkoLCoEi2Kb7vu1vZH6nlKQX34=);
+    background-size: cover;
+    border-radius: 50%;
+    filter: grayscale(100%);
+    margin: auto;
+
+}
+.edu-img2{
+    border: 2px solid wheat;
+    height: 95%;
+    width: 22%;
+    background-image: url(https://cdn1.vectorstock.com/i/1000x1000/98/35/high-school-education-cartoon-vector-20949835.jpg);
+    background-size: cover;
+    border-radius: 50%;
+    filter: grayscale(100%);  
+    margin: auto;  
+}
+
+/* exp */
+
+.exp{
+    height: 100px;
+    width: 100%;
+    background-color: #1f2020;
+    border: 2px solid wheat;
+}
+.experience{
+    text-align: center;
+    font-size: 32px;
+    text-decoration: underline;
+    color: whitesmoke;
+}
+
+/* hobby */
+
+.h-i{
+    background-color: #1f2020;
+    height: 250px;
+    width: 100%;
+    display: flex;
+}
+
+.h, .i{
+    height: 100%;
+    width: 50%;
+    border: 2px solid wheat;
+}
+
+.contact{
+    height: 200px;
+    background-color: #1f2020;
+    color: whitesmoke;
+    font-size: 20px;
+    text-align: center;
+    line-height: 2;
+}
