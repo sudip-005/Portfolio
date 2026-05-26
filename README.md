@@ -1,5 +1,7 @@
 # 🌿 Sudip Manna — 3D Developer Portfolio
 
+🔗 **Live Demo:** [sudip-3d-portfolio.web.app](https://sudip-3d-portfolio.web.app/)
+
 Welcome to my interactive **3D Developer Portfolio**, a modern web experience designed to showcase my projects, development stack, and academic journey. Built at the intersection of technology and design, this sanctuary represents a blend of cinematic 3D visuals, smooth micro-animations, and organic nature-inspired vibes.
 
 ---
