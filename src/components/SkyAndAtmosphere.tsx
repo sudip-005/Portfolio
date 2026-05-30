@@ -155,17 +155,9 @@ export default function SkyAndAtmosphere({ isDark, themeProgress }: SkyAndAtmosp
       }
     }
 
-    // Animate Cloud drifting
+    // Animate Cloud colors (but keep position fixed)
     if (cloudsGroupRef.current) {
       cloudsGroupRef.current.children.forEach((cloud, i) => {
-        const cloudData = cloudsData[i];
-        if (cloudData) {
-          cloud.position.x += cloudData.speed;
-          if (cloud.position.x > 45) {
-            cloud.position.x = -45;
-          }
-        }
-        
         const meshGroup = cloud as THREE.Group;
         const dayColor = new THREE.Color("#ffffff");
         const nightColor = new THREE.Color("#18192b");
@@ -291,29 +283,6 @@ export default function SkyAndAtmosphere({ isDark, themeProgress }: SkyAndAtmosp
             <sphereGeometry args={[3.8, 20, 20]} />
             <meshBasicMaterial color="#fff2dc" toneMapped={false} />
           </mesh>
-          {/* Sun Halo Layers */}
-          <mesh>
-            <sphereGeometry args={[5.2, 20, 20]} />
-            <meshBasicMaterial
-              color="#fff0cc"
-              transparent
-              opacity={0.3}
-              blending={THREE.AdditiveBlending}
-              side={THREE.DoubleSide}
-              depthWrite={false}
-            />
-          </mesh>
-          <mesh>
-            <sphereGeometry args={[7.2, 20, 20]} />
-            <meshBasicMaterial
-              color="#ffe2aa"
-              transparent
-              opacity={0.12}
-              blending={THREE.AdditiveBlending}
-              side={THREE.DoubleSide}
-              depthWrite={false}
-            />
-          </mesh>
           <pointLight color="#ffeed0" intensity={3.5} distance={140} decay={1.3} castShadow />
         </group>
 
@@ -341,18 +310,6 @@ export default function SkyAndAtmosphere({ isDark, themeProgress }: SkyAndAtmosp
           <mesh position={[-0.4, -1.4, 2.6]} rotation={[0, -0.15, 0]}>
             <circleGeometry args={[0.18, 16]} />
             <meshBasicMaterial color="#b8ccdf" toneMapped={false} />
-          </mesh>
-          {/* Outer glow halo */}
-          <mesh>
-            <sphereGeometry args={[4.2, 20, 20]} />
-            <meshBasicMaterial
-              color="#8baeff"
-              transparent
-              opacity={0.12}
-              blending={THREE.AdditiveBlending}
-              side={THREE.BackSide}
-              depthWrite={false}
-            />
           </mesh>
           <pointLight color="#cadcff" intensity={1.8} distance={140} decay={1.3} />
         </group>

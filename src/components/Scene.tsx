@@ -109,8 +109,8 @@ export default function Scene({ isDark, themeProgress }: SceneProps) {
         position={[15, 30, -10]}
         intensity={2.2}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-near={0.5}
         shadow-camera-far={100}
         shadow-camera-left={-20}
@@ -126,8 +126,8 @@ export default function Scene({ isDark, themeProgress }: SceneProps) {
         position={[-15, 25, 20]}
         intensity={0}
         castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        shadow-mapSize-width={512}
+        shadow-mapSize-height={512}
         shadow-bias={-0.0005}
       />
 

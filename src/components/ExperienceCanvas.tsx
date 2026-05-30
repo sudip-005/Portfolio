@@ -125,7 +125,7 @@ export default function ExperienceCanvas({ isDark, themeProgress }: ExperienceCa
     <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none canvas-container bg-[#f5f2eb] dark:bg-[#0c0d12]">
       <Canvas
         shadows
-        dpr={[1, 1.8]}
+        dpr={[1, 1.5]}
         camera={{ position: [0.6, 2.2, 9.8], fov: 45, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
       >

@@ -192,7 +192,7 @@ export default function JumpingFishes({ themeProgress }: JumpingFishesProps) {
           }}
         >
           {/* Detailed Fish Body (Elongated low-poly sphere) */}
-          <mesh castShadow scale={[0.7, 1.0, 1.9]}>
+          <mesh scale={[0.7, 1.0, 1.9]}>
             <sphereGeometry args={[0.07, 8, 8]} />
             <meshStandardMaterial
               color={fish.color}

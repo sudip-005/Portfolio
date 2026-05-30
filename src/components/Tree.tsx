@@ -370,7 +370,7 @@ export default function Tree({ themeProgress }: TreeProps) {
   }, [themeProgress]);
 
   // --- 4. Canopy 3D Leaf Instances Setup ---
-  // Doubled leaf density again to 9600 for incredibly lush, thick coverage
+  // Restored leaf density to 9600 for full lushness, but optimized vertex segments
   const leafCount = 9600;
   
   const branchEnds = useMemo(() => [
@@ -608,12 +608,12 @@ export default function Tree({ themeProgress }: TreeProps) {
 
       {/* --- 2. Instanced Leaves Canopy --- */}
       <instancedMesh
+        key={`leaves-${leafCount}`}
         ref={leavesRef}
         args={[null as any, null as any, leafCount]}
         castShadow
-        frustumCulled={false}
       >
-        <planeGeometry args={[0.5, 0.7, 8, 8]} />
+        <planeGeometry args={[0.5, 0.7, 2, 3]} />
         <shaderMaterial
           vertexShader={canopyShader.vertexShader}
           fragmentShader={canopyShader.fragmentShader}
@@ -635,7 +635,7 @@ export default function Tree({ themeProgress }: TreeProps) {
           scale={[0.5, 0.5, 0.5]}
           castShadow
         >
-          <planeGeometry args={[0.5, 0.7, 8, 8]} />
+          <planeGeometry args={[0.5, 0.7, 2, 3]} />
           <shaderMaterial
             vertexShader={canopyShader.vertexShader}
             fragmentShader={canopyShader.fragmentShader}

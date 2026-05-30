@@ -120,7 +120,7 @@ export default function Butterflies({ themeProgress }: ButterfliesProps) {
           {/* Main Butterfly Group */}
           
           {/* Central Body (Dark minimal capsule) */}
-          <mesh castShadow>
+          <mesh>
             <cylinderGeometry args={[0.015, 0.015, 0.16, 6]} />
             <meshBasicMaterial color="#1c1c1c" />
           </mesh>
@@ -132,7 +132,7 @@ export default function Butterflies({ themeProgress }: ButterfliesProps) {
             }}
             position={[-0.015, 0, 0]}
           >
-            <mesh castShadow position={[-0.09, 0, 0]}>
+            <mesh position={[-0.09, 0, 0]}>
               <planeGeometry args={[0.18, 0.14]} />
               <meshStandardMaterial
                 ref={(el) => {
@@ -157,7 +157,7 @@ export default function Butterflies({ themeProgress }: ButterfliesProps) {
             }}
             position={[0.015, 0, 0]}
           >
-            <mesh castShadow position={[0.09, 0, 0]}>
+            <mesh position={[0.09, 0, 0]}>
               <planeGeometry args={[0.18, 0.14]} />
               <meshStandardMaterial
                 ref={(el) => {

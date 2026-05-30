@@ -8,6 +8,15 @@ interface GrassAndWaterProps {
   themeProgress: number; // 0: day, 1: night
 }
 
+// Simple seedable pseudo-random number generator (LCG) to make placements fully deterministic
+function createSeedRandom(seed: number) {
+  let s = seed;
+  return function() {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280.0;
+  };
+}
+
 export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
   const grassRef = useRef<THREE.InstancedMesh>(null);
   const flowersRef = useRef<THREE.InstancedMesh>(null);
@@ -23,23 +32,26 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
   const size = 95; // Ground size covering horizon
 
   // --- 1. Grass Setup ---
-  const grassCount = 4800; // Densely populated grass field
+  const grassCount = 3600; // Densely populated grass field
   const grassBladesData = useMemo(() => {
+    const rand = createSeedRandom(42);
     const tempObject = new THREE.Object3D();
     const positions: [number, number, number][] = [];
     
     for (let i = 0; i < grassCount; i++) {
-      let x = (Math.random() - 0.5) * size;
-      let z = (Math.random() - 0.5) * size;
+      let x = 0;
+      let z = 0;
       
-      // Avoid the stream channel (x = 0.6 to 7.0)
-      while (x > 0.6 && x < 7.0) {
-        x = (Math.random() - 0.5) * size;
-      }
-      // Avoid tree center (x=0, z=0)
-      while (Math.abs(x) < 1.5 && Math.abs(z) < 1.5) {
-        x = (Math.random() - 0.5) * size;
-        z = (Math.random() - 0.5) * size;
+      // Combined loop to avoid stream channel and tree base
+      let valid = false;
+      while (!valid) {
+        x = (rand() - 0.5) * size;
+        z = (rand() - 0.5) * size;
+        const inStream = (x > -0.8 && x < 8.4);
+        const nearTree = (Math.abs(x) < 1.5 && Math.abs(z) < 1.5);
+        if (!inStream && !nearTree) {
+          valid = true;
+        }
       }
 
       const y = -0.05 + Math.sin(x * 0.1) * Math.cos(z * 0.1) * 0.3;
@@ -49,7 +61,7 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
   }, [grassCount]);
 
   // --- 2. Flowers Setup ---
-  const flowerCount = 1800; // Scattered everywhere in huge quantity
+  const flowerCount = 1200; // Scattered everywhere in huge quantity
   const flowerTypes = [
     "#ff577b", // vibrant pink (matching reference)
     "#ffa238", // bubbly orange/yellow
@@ -61,28 +73,30 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
     "#e0b0ff", // soft lavender
   ];
   const flowersData = useMemo(() => {
+    const rand = createSeedRandom(100);
     const tempObject = new THREE.Object3D();
     const positions: [number, number, number][] = [];
     const colors: string[] = [];
 
     for (let i = 0; i < flowerCount; i++) {
-      // Scatter randomly across the entire grid size to cover the ground everywhere
-      let x = (Math.random() - 0.5) * (size - 4);
-      let z = (Math.random() - 0.5) * (size - 4);
+      let x = 0;
+      let z = 0;
 
-      // Avoid stream channel
-      while (x > 0.6 && x < 7.0) {
-        x = (Math.random() - 0.5) * size;
-      }
-      // Avoid central tree base
-      while (Math.abs(x) < 1.5 && Math.abs(z) < 1.5) {
-        x = (Math.random() - 0.5) * size;
-        z = (Math.random() - 0.5) * size;
+      // Combined loop to avoid stream channel and tree base
+      let valid = false;
+      while (!valid) {
+        x = (rand() - 0.5) * (size - 4);
+        z = (rand() - 0.5) * (size - 4);
+        const inStream = (x > -0.8 && x < 8.4);
+        const nearTree = (Math.abs(x) < 1.5 && Math.abs(z) < 1.5);
+        if (!inStream && !nearTree) {
+          valid = true;
+        }
       }
 
       const y = 0.05 + Math.sin(x * 0.1) * Math.cos(z * 0.1) * 0.3;
       positions.push([x, y, z]);
-      colors.push(flowerTypes[Math.floor(Math.random() * flowerTypes.length)]);
+      colors.push(flowerTypes[Math.floor(rand() * flowerTypes.length)]);
     }
     return { positions, colors, tempObject };
   }, [flowerCount]);
@@ -103,6 +117,7 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
   // --- 3. Stones & Pebbles Setup ---
   const rockCount = 110;
   const rocksData = useMemo(() => {
+    const rand = createSeedRandom(2026);
     const tempObject = new THREE.Object3D();
     const positions: [number, number, number][] = [];
     const scales: [number, number, number][] = [];
@@ -116,57 +131,59 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
         // Group 1: Riverbank stones
         const isLeft = i % 2 === 0;
         x = isLeft 
-          ? 1.3 - Math.random() * 0.5 
-          : 6.3 + Math.random() * 0.5;
-        z = (Math.random() - 0.5) * (size - 4);
+          ? 1.3 - rand() * 0.5 
+          : 6.3 + rand() * 0.5;
+        z = (rand() - 0.5) * (size - 4);
       } else if (i < 82) {
         // Group 2: Tree base stones
-        const radius = 0.8 + Math.random() * 1.6;
-        const angle = Math.random() * Math.PI * 2;
+        const radius = 0.8 + rand() * 1.6;
+        const angle = rand() * Math.PI * 2;
         x = Math.cos(angle) * radius;
         z = Math.sin(angle) * radius;
       } else {
         // Group 3: Grass plain pebbles
-        x = (Math.random() - 0.5) * (size - 10);
-        z = (Math.random() - 0.5) * (size - 10);
-        while (x > 0.6 && x < 7.0) {
-          x = (Math.random() - 0.5) * size;
-        }
-        while (Math.abs(x) < 1.2 && Math.abs(z) < 1.2) {
-          x = (Math.random() - 0.5) * size;
-          z = (Math.random() - 0.5) * size;
+        let valid = false;
+        while (!valid) {
+          x = (rand() - 0.5) * (size - 10);
+          z = (rand() - 0.5) * (size - 10);
+          const inStream = (x > -0.8 && x < 8.4);
+          const nearTree = (Math.abs(x) < 1.2 && Math.abs(z) < 1.2);
+          if (!inStream && !nearTree) {
+            valid = true;
+          }
         }
       }
       
       const y = -0.1 + Math.sin(x * 0.1) * Math.cos(z * 0.1) * 0.3;
 
       positions.push([x, y, z]);
-      const scaleX = 0.12 + Math.random() * 0.28;
-      const scaleY = 0.05 + Math.random() * 0.12;
-      const scaleZ = 0.15 + Math.random() * 0.35;
+      const scaleX = 0.12 + rand() * 0.28;
+      const scaleY = 0.05 + rand() * 0.12;
+      const scaleZ = 0.15 + rand() * 0.35;
       scales.push([scaleX, scaleY, scaleZ]);
       
       rotations.push([
-        (Math.random() - 0.5) * 0.3,
-        Math.random() * Math.PI,
-        (Math.random() - 0.5) * 0.3
+        (rand() - 0.5) * 0.3,
+        rand() * Math.PI,
+        (rand() - 0.5) * 0.3
       ]);
     }
     return { positions, scales, rotations, tempObject };
   }, []);
 
-  // Initialize instanced mesh matrices on mount
+  // Initialize instanced mesh matrices on mount (fully seeded for determinism)
   useEffect(() => {
     if (grassRef.current) {
       const { positions, tempObject } = grassBladesData;
+      const rand = createSeedRandom(999);
       positions.forEach(([x, y, z], i) => {
         tempObject.position.set(x, y, z);
         tempObject.rotation.set(
-          (Math.random() - 0.5) * 0.1,
-          Math.random() * Math.PI,
-          (Math.random() - 0.5) * 0.1
+          (rand() - 0.5) * 0.1,
+          rand() * Math.PI,
+          (rand() - 0.5) * 0.1
         );
-        const scale = 0.7 + Math.random() * 0.6;
+        const scale = 0.7 + rand() * 0.6;
         tempObject.scale.set(scale, scale * 1.2, scale);
         tempObject.updateMatrix();
         grassRef.current!.setMatrixAt(i, tempObject.matrix);
@@ -176,25 +193,26 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
 
     if (flowersRef.current && flowerStemsRef.current) {
       const { positions, colors, tempObject } = flowersData;
+      const rand = createSeedRandom(888);
       positions.forEach(([x, y, z], i) => {
-        const stemScale = 0.6 + Math.random() * 0.5;
+        const stemScale = 0.6 + rand() * 0.5;
         const stemHeight = 0.35 * stemScale;
         
-        // 1. Position and scale stem (made thinner in JSX args)
+        // 1. Position and scale stem
         tempObject.position.set(x, y + stemHeight / 2, z);
-        tempObject.rotation.set(0, Math.random() * Math.PI, 0);
+        tempObject.rotation.set(0, rand() * Math.PI, 0);
         tempObject.scale.set(1.0, stemScale, 1.0);
         tempObject.updateMatrix();
         flowerStemsRef.current!.setMatrixAt(i, tempObject.matrix);
         
-        // 2. Position and scale blossom on top of the stem (laying flat face-up, scale increased for bigger heads)
+        // 2. Position and scale blossom on top of the stem
         tempObject.position.set(x, y + stemHeight, z);
         tempObject.rotation.set(
-          -Math.PI / 2 + (Math.random() - 0.5) * 0.2,
-          Math.random() * Math.PI,
-          (Math.random() - 0.5) * 0.2
+          -Math.PI / 2 + (rand() - 0.5) * 0.2,
+          rand() * Math.PI,
+          (rand() - 0.5) * 0.2
         );
-        const blossomScale = 0.65 + Math.random() * 0.3; // Make flower heads slightly smaller
+        const blossomScale = 0.65 + rand() * 0.3;
         tempObject.scale.set(blossomScale, blossomScale, blossomScale);
         tempObject.updateMatrix();
         flowersRef.current!.setMatrixAt(i, tempObject.matrix);
@@ -758,11 +776,9 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
 
       {/* 2. Instanced Grass Fields (Tapered, bent, twisted, creased 3D blades) */}
       <instancedMesh
+        key={`grass-${grassCount}`}
         ref={grassRef}
         args={[null as any, null as any, grassCount]}
-        castShadow
-        receiveShadow
-        frustumCulled={false}
       >
         <planeGeometry args={[0.08, 0.7, 1, 4]} />
         <shaderMaterial
@@ -775,10 +791,9 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
 
       {/* 3. Instanced Flowers (Scattered everywhere, big heads, scalloped centers) */}
       <instancedMesh
+        key={`flowers-${flowerCount}`}
         ref={flowersRef}
         args={[null as any, null as any, flowerCount]}
-        castShadow
-        frustumCulled={false}
       >
         <planeGeometry args={[0.32, 0.32]}>
           <instancedBufferAttribute
@@ -799,10 +814,9 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
 
       {/* Flower Stems (Thinned to 0.005 radius) */}
       <instancedMesh
+        key={`stems-${flowerCount}`}
         ref={flowerStemsRef}
         args={[null as any, null as any, flowerCount]}
-        castShadow
-        frustumCulled={false}
       >
         <cylinderGeometry args={[0.005, 0.005, 0.35, 4]} />
         <shaderMaterial
@@ -815,11 +829,11 @@ export default function GrassAndWater({ themeProgress }: GrassAndWaterProps) {
 
       {/* 4. Instanced Riverbank & Tree base Pebbles */}
       <instancedMesh
+        key={`rocks-${rockCount}`}
         ref={rocksRef}
         args={[null as any, null as any, rockCount]}
         castShadow
         receiveShadow
-        frustumCulled={false}
       >
         <dodecahedronGeometry args={[1, 1]} />
         <meshStandardMaterial ref={rockMaterialRef} roughness={0.8} metalness={0.15} />
